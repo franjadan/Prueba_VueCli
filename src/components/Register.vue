@@ -58,19 +58,7 @@ export default {
             err => {
                 alert(err.message);
             });
-            
-            /*
-            firebase
-            .auth()
-            .createUserWithEmailAndPassword(this.email, this.password)
-            .then(user => {
-                alert("Cuenta creada para " + user.user.email);
-                this.$router.go({path: this.$router.path});
-            },
-            err => {
-                alert(err.message);
-            });
-            */
+
             e.preventDefault();
     
         }
