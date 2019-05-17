@@ -35,16 +35,42 @@ export default {
     },
     methods: {
         register: function(e){
+            firebase.firestore()
+            .collection("users")
+            .where("email", "==", this.email)
+            .get()
+            .then(querySnapshot => {
+                if(querySnapshot.size > 0){
+                    firebase
+                    .auth()
+                    .createUserWithEmailAndPassword(this.email, this.password)
+                    .then(user => {
+                        alert("Cuenta creada para " + user.user.email);
+                        this.$router.go({path: this.$router.path});
+                    },
+                    err => {
+                        alert(err.message);
+                    });
+                }else{
+                    alert("No te puedes registrar");
+                }
+            },
+            err => {
+                alert(err.message);
+            });
+            
+            /*
             firebase
             .auth()
             .createUserWithEmailAndPassword(this.email, this.password)
             .then(user => {
-                alert("Cuenta creada para " + + user.user.email);
+                alert("Cuenta creada para " + user.user.email);
                 this.$router.go({path: this.$router.path});
             },
             err => {
                 alert(err.message);
             });
+            */
             e.preventDefault();
     
         }
