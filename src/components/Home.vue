@@ -1,17 +1,12 @@
 <template>
   <div id="home">
     <h1 class="mt-3">Control de asistencias</h1>
-		<ul class="list-group">
-			<li v-for="assistance in assists" v-bind:key="assistance.id" class="list-group-item">
-				<div>
-					{{ assistance.user }}, {{ assistance.in }}, {{ assistance.out }}
-				</div>
-			</li>
-		</ul>
 
-        <download-excel v-if="admin" class="btn btn-primary mt-5" :data = "assists" :fields = "json_fields" worksheet ="My Worksheet" name ="filename.xls">
+        <download-excel v-if="admin" class="btn btn-primary pull-right" :data = "assists" :fields = "json_fields" worksheet ="My Worksheet" name ="filename.xls">
             Download Excel
         </download-excel>
+
+        <grid :data="assists" :columns="columns" :keys="keys"></grid>
   </div>
 </template>
 
@@ -20,6 +15,7 @@ import db from './firebaseInit';
 import firebase from 'firebase';
 import Vue from 'vue'
 import JsonExcel from 'vue-json-excel';
+import Grid from './Grid'
 Vue.component('downloadExcel', JsonExcel);
 
 export default {
@@ -27,6 +23,8 @@ export default {
     data: function(){
         return{
             assists: [],
+            columns: ['Empleado', 'Entrada', 'Salida'],
+            keys: ['user', 'in', 'out'],
             admin: false,
             json_fields: {
                 'Empleado': 'user',
@@ -43,7 +41,9 @@ export default {
             ]
         }
     },
-
+    components: {
+        Grid
+    },
     created(){
 
         firebase
