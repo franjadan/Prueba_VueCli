@@ -8,7 +8,7 @@
         <table class="table mt-5">
             <thead>
                 <tr>
-                    <th scope="col" v-for="(key, index) in columns" v-bind:key="index" @click="sortBy(keys[index])" :class="{ active: sortKey == key }"> {{key | capitalize}}<span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span></th>
+                    <th scope="col" v-for="(key, index) in columns" v-bind:key="index"> {{key | capitalize}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -40,10 +40,7 @@
     },
     data() {
       return {
-
         searchQuery: '',
-        sortKey: '',
-        sortOrders: {},
         startRow: 0,
         rowsPerPage: 10
       }
@@ -54,9 +51,7 @@
           .rowsPerPage))
       },
       filteredData: function () {
-          let sortKey = this.sortKey;
           let filterKey = this.searchQuery && this.searchQuery.toLowerCase();
-          let order = this.sortOrders[sortKey] || 1;
           let data = this.data;
 
           if (filterKey) {
@@ -71,16 +66,6 @@
             )
           }
 
-          if (sortKey) {
-            data = data.slice().sort(function (a, b) {
-                a = a[sortKey];
-                b = b[sortKey];
-                return (a === b ? 0 : a > b ? 1 : -1) * order;
-              }
-
-            )
-          }
-
           return data;
         }
     },
@@ -90,10 +75,6 @@
       }
     },
     methods: {
-      sortBy: function (key) {
-          this.sortKey = key;
-          this.sortOrders[key] = this.sortOrders[key] * -1
-        },
       movePages: function (amount) {
         let newStartRow = this.startRow + (amount * this.rowsPerPage);
 
@@ -101,45 +82,7 @@
           this.startRow = newStartRow;
         }
       }
-    },
-    created() {
-      console.log(this.filteredData);
-
-      let sortOrders = {};
-
-      this.columns.forEach(function (key) {
-          sortOrders[key] = 1;
-        }
-
-      ); this.sortOrders = sortOrders;
     }
   }
 
 </script>
-<style scoped>
-
-    th{
-        cursor:pointer;
-    }
-  .arrow {
-    display: inline-block;
-    vertical-align: middle;
-    width: 0;
-    height: 0;
-    margin-left: 5px;
-    opacity: 0.66;
-  }
-
-  .arrow.asc {
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-bottom: 4px solid #FAE042;
-  }
-
-  .arrow.dsc {
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-top: 4px solid #FAE042;
-  }
-
-</style>

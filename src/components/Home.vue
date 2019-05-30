@@ -60,6 +60,9 @@ export default {
                     firebase
                     .firestore()
                     .collection("assists")
+                    .orderBy("In", "desc")
+                    .orderBy("Out", "desc")
+                    .orderBy("user")
                     .get()
                     .then(querySnapshot => {
                         querySnapshot.forEach(doc => {
@@ -69,8 +72,8 @@ export default {
 
                             const data = {
                                 user: doc.data().user,
-                                in: dateIn.getDay() + "/" + (dateIn.getMonth() + 1) + "/" + dateIn.getFullYear() + " " + dateIn.getHours() + ":" + dateIn.getMinutes() + ":" + dateIn.getSeconds(),
-                                out: dateOut.getDay() + "/" + (dateOut.getMonth() + 1) + "/" + dateOut.getFullYear() + " " + dateOut.getHours() + ":" + dateOut.getMinutes() + ":" + dateOut.getSeconds(),
+                                in: dateIn.getDate() + "/" + (dateIn.getMonth() + 1) + "/" + dateIn.getFullYear() + " " + dateIn.getHours() + ":" + dateIn.getMinutes() + ":" + dateIn.getSeconds(),
+                                out: dateOut.getDate() + "/" + (dateOut.getMonth() + 1) + "/" + dateOut.getFullYear() + " " + dateOut.getHours() + ":" + dateOut.getMinutes() + ":" + dateOut.getSeconds(),
                             };
                             
                             this.assists.push(data);
@@ -93,8 +96,8 @@ export default {
                             const data = {
                                 id: doc.data().id,
                                 user: doc.data().user,
-                                in: dateIn.getDay() + "/" + (dateIn.getMonth() + 1) + "/" + dateIn.getFullYear() + " " + dateIn.getHours() + ":" + dateIn.getMinutes() + ":" + dateIn.getSeconds(),
-                                out: dateOut.getDay() + "/" + (dateOut.getMonth() + 1) + "/" + dateOut.getFullYear() + " " + dateOut.getHours() + ":" + dateOut.getMinutes() + ":" + dateOut.getSeconds(),
+                                in: dateIn.getDate() + "/" + (dateIn.getMonth() + 1) + "/" + dateIn.getFullYear() + " " + dateIn.getHours() + ":" + dateIn.getMinutes() + ":" + dateIn.getSeconds(),
+                                out: dateOut.getDate() + "/" + (dateOut.getMonth() + 1) + "/" + dateOut.getFullYear() + " " + dateOut.getHours() + ":" + dateOut.getMinutes() + ":" + dateOut.getSeconds(),
                             };
                             
                             this.assists.push(data);
