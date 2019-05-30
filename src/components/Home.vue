@@ -8,19 +8,40 @@
 				</div>
 			</li>
 		</ul>
+
+        <download-excel v-if="admin" class="btn btn-primary mt-5" :data = "assists" :fields = "json_fields" worksheet ="My Worksheet" name ="filename.xls">
+            Download Excel
+        </download-excel>
   </div>
 </template>
 
 <script>
 import db from './firebaseInit';
 import firebase from 'firebase';
+import Vue from 'vue'
+import JsonExcel from 'vue-json-excel';
+Vue.component('downloadExcel', JsonExcel);
 
 export default {
     name: 'home',
     data: function(){
         return{
-            assists: []
-        };
+            assists: [],
+            admin: false,
+            json_fields: {
+                'Empleado': 'user',
+                'Entrada': 'in',
+                'Salida': 'out'
+            },
+            json_meta: [
+                [
+                    {
+                        'key': 'charset',
+                        'value': 'utf-8'
+                    }
+                ]
+            ]
+        }
     },
 
     created(){
@@ -34,7 +55,8 @@ export default {
             if(querySnapshot.size > 0){
                 if(querySnapshot.docs[0].data().rol == "administrador"){
                     console.log("Admin");
-
+                    this.admin = true;
+                    
                     firebase
                     .firestore()
                     .collection("assists")
@@ -46,7 +68,6 @@ export default {
                             let dateOut = new Date(doc.data().Out.seconds * 1000);
 
                             const data = {
-                                id: doc.data().id,
                                 user: doc.data().user,
                                 in: dateIn.getDay() + "/" + (dateIn.getMonth() + 1) + "/" + dateIn.getFullYear() + " " + dateIn.getHours() + ":" + dateIn.getMinutes() + ":" + dateIn.getSeconds(),
                                 out: dateOut.getDay() + "/" + (dateOut.getMonth() + 1) + "/" + dateOut.getFullYear() + " " + dateOut.getHours() + ":" + dateOut.getMinutes() + ":" + dateOut.getSeconds(),
